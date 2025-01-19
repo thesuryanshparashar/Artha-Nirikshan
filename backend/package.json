@@ -16,7 +16,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "build": "node build --output public"
+    "build": "echo 'No build required for backend'"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
