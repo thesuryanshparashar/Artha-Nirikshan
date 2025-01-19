@@ -15,7 +15,8 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "build": "node build --output public"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
