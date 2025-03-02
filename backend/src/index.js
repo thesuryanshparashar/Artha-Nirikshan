@@ -10,11 +10,15 @@ const PORT = process.env.PORT || 8001
 
 connectDB()
     .then(() => {
-        app.listen(PORT, () => {
-            console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
-        })
+        console.log(`Server connected to MongoDB`)
+        // app.listen(PORT, () => {
+        //     console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+        // })
     })
     .catch((error) => {
         console.error("MongoDB connection error: ", error)
         process.exit(1)
     })
+
+
+export default app

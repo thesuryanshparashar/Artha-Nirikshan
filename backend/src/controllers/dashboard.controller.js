@@ -60,6 +60,11 @@ const recordsDashboard = asyncHandler(async (req, res) => {
                 },
             },
         },
+        {
+            $sort: {
+                totalAmount: -1,
+            },
+        },
     ])
 
     const paymentMethodWiseRecords = await Record.aggregate([
@@ -74,6 +79,11 @@ const recordsDashboard = asyncHandler(async (req, res) => {
                 totalAmount: {
                     $sum: "$amount",
                 },
+            },
+        },
+        {
+            $sort: {
+                totalAmount: -1,
             },
         },
     ])

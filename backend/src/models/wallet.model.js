@@ -30,7 +30,6 @@ walletSchema.methods.deductBalance = async function (amount) {
     }
 
     this.balance -= amount
-    await this.save()
 }
 
 export const Wallet = mongoose.model("Wallet", walletSchema)

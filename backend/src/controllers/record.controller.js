@@ -5,16 +5,22 @@ import { Record } from "../models/record.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { ApiError } from "../utils/ApiError.js"
 import { Wallet } from "../models/wallet.model.js"
+import moment from "moment"
 
 const createRecord = asyncHandler(async (req, res) => {
-    const { amount, paymentMethod } = req.body
+    const { date, title, category, amount, paymentMethod } = req.body
 
     if (amount < 0) {
         throw new ApiError(400, "Amount cannot be negative")
     }
 
+    // const formattedDate = moment(date, "DD-MM-YYYY").format("DD-MM-YYYY HH:mm:ss").toISOString()
+    // console.log(formattedDate)
+
     const session = await mongoose.startSession()
     session.startTransaction()
+
+    console.log("Transaction started")
 
     try {
         let wallet
@@ -36,12 +42,15 @@ const createRecord = asyncHandler(async (req, res) => {
         console.log("Creating record")
 
         const record = await Record.create(
-            [{ ...req.body, owner: req.user._id }],
+            [{ 
+                ...req.body,
+                owner: req.user._id
+            }],
             { session }
         )
 
         console.log("record created")
-        console.log(record)
+        // console.log(record)
 
         if (!record || record.length === 0) {
             throw new ApiError(400, "Record creation failed")
@@ -62,7 +71,7 @@ const createRecord = asyncHandler(async (req, res) => {
     } catch (error) {
         await session.abortTransaction()
         session.endSession()
-        throw new ApiError(500, "Record creation failed")
+        throw new ApiError(500, "Record creation failed: " + error.message)
     }
 })
 
