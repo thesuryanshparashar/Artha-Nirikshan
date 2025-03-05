@@ -100,11 +100,7 @@ const changeWalletName = asyncHandler(async (req, res) => {
 })
 
 const deleteWallet = asyncHandler(async (req, res) => {
-    const wallet = await Wallet.findOneAndUpdate(
-        { owner: req.user._id },
-        { walletName: "Wallet", balance: 0 },
-        { new: true }
-    )
+    const wallet = await Wallet.findOneAndDelete({ owner: req.user._id })
 
     if (!wallet) {
         throw new ApiError(404, "Wallet not found/deleted")
