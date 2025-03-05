@@ -1,0 +1,122 @@
+[
+    {
+        "owner": { "$oid": "67c83c2f7618b7971a97d4c3" },
+        "date": "2025-03-01T08:30:00.000Z",
+        "title": "Monthly Electricity Bill",
+        "category": "Utilities",
+        "amount": 1250.0,
+        "paymentMethod": "UPI"
+    },
+    {
+        "owner": { "$oid": "67c83c2f7618b7971a97d4c3" },
+        "date": "2025-03-02T12:15:00.000Z",
+        "title": "Lunch at Local Dhaba",
+        "category": "Food",
+        "amount": 180.0,
+        "paymentMethod": "Cash"
+    },
+    {
+        "owner": { "$oid": "67c83c2f7618b7971a97d4c3" },
+        "date": "2025-03-03T15:45:00.000Z",
+        "title": "Movie Tickets",
+        "category": "Entertainment",
+        "amount": 600.0,
+        "paymentMethod": "Credit Card"
+    },
+    {
+        "owner": { "$oid": "67c83c2f7618b7971a97d4c3" },
+        "date": "2025-03-04T09:00:00.000Z",
+        "title": "Bus Fare to Office",
+        "category": "Transport",
+        "amount": 50.0,
+        "paymentMethod": "Wallet"
+    },
+    {
+        "owner": { "$oid": "67c83c2f7618b7971a97d4c3" },
+        "date": "2025-03-05T18:20:00.000Z",
+        "title": "Groceries from Big Bazaar",
+        "category": "Shopping",
+        "amount": 2450.0,
+        "paymentMethod": "Debit Card"
+    },
+    {
+        "owner": { "$oid": "67c83c2f7618b7971a97d4c3" },
+        "date": "2025-03-06T10:30:00.000Z",
+        "title": "Doctor Consultation",
+        "category": "Health",
+        "amount": 800.0,
+        "paymentMethod": "Net Banking"
+    },
+    {
+        "owner": { "$oid": "67c83c2f7618b7971a97d4c3" },
+        "date": "2025-03-07T14:00:00.000Z",
+        "title": "Mobile Recharge",
+        "category": "Bills",
+        "amount": 299.0,
+        "paymentMethod": "UPI"
+    },
+    {
+        "owner": { "$oid": "67c83c2f7618b7971a97d4c3" },
+        "date": "2025-03-08T19:15:00.000Z",
+        "title": "Dinner at Restaurant",
+        "category": "Food",
+        "amount": 750.0,
+        "paymentMethod": "Credit Card"
+    },
+    {
+        "owner": { "$oid": "67c83c2f7618b7971a97d4c3" },
+        "date": "2025-03-09T11:00:00.000Z",
+        "title": "Auto Rickshaw Ride",
+        "category": "Transport",
+        "amount": 120.0,
+        "paymentMethod": "Cash"
+    },
+    {
+        "owner": { "$oid": "67c83c2f7618b7971a97d4c3" },
+        "date": "2025-03-10T16:30:00.000Z",
+        "title": "Online Course Subscription",
+        "category": "Education",
+        "amount": 1500.0,
+        "paymentMethod": "Wallet"
+    },
+    {
+        "owner": { "$oid": "67c83c2f7618b7971a97d4c3" },
+        "date": "2025-03-11T09:45:00.000Z",
+        "title": "Water Bill",
+        "category": "Utilities",
+        "amount": 450.0,
+        "paymentMethod": "Net Banking"
+    },
+    {
+        "owner": { "$oid": "67c83c2f7618b7971a97d4c3" },
+        "date": "2025-03-12T13:20:00.000Z",
+        "title": "Clothing Purchase",
+        "category": "Shopping",
+        "amount": 3200.0,
+        "paymentMethod": "Debit Card"
+    },
+    {
+        "owner": { "$oid": "67c83c2f7618b7971a97d4c3" },
+        "date": "2025-03-13T17:00:00.000Z",
+        "title": "Gym Membership",
+        "category": "Health",
+        "amount": 2000.0,
+        "paymentMethod": "UPI"
+    },
+    {
+        "owner": { "$oid": "67c83c2f7618b7971a97d4c3" },
+        "date": "2025-03-14T20:00:00.000Z",
+        "title": "Netflix Subscription",
+        "category": "Entertainment",
+        "amount": 649.0,
+        "paymentMethod": "Credit Card"
+    },
+    {
+        "owner": { "$oid": "67c83c2f7618b7971a97d4c3" },
+        "date": "2025-03-15T10:15:00.000Z",
+        "title": "Miscellaneous Stationery",
+        "category": "Others",
+        "amount": 250.0,
+        "paymentMethod": "Cash"
+    }
+]

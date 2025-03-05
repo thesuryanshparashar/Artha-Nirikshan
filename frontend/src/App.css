@@ -1,0 +1,450 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.app {
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Header Component */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #007bff;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.user-header-btn,
+.login-btn,
+.register-btn,
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.user-header-btn {
+  background: none;
+  color: white;
+}
+
+.avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.username {
+  font-size: 16px;
+}
+
+.login-btn {
+  background-color: #fff;
+  color: #007bff;
+}
+
+.register-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.logout-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.user-popup {
+  position: absolute;
+  top: 60px;
+  right: 30px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  z-index: 1000;
+}
+
+.popup-logout-btn {
+  background: none;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  padding: 5px 10px;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+}
+
+.popup-logout-btn:hover {
+  background-color: #f8f9fa;
+}
+
+/* Login Component */
+.login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+.form-input input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.login-btn {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.login-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.register-link {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Register Component */
+.register-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.register-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+.register-btn {
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.register-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Healthcheck Component */
+.healthcheck-container {
+  max-width: 400px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.healthcheck-container h1 {
+  color: #333;
+  font-size: 24px;
+}
+
+/* RecordForm Component */
+.record-form-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.record-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.record-form-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+.form-input {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-input label {
+  font-weight: bold;
+  color: #555;
+}
+
+.form-input input,
+.form-input select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.submit-btn {
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* UserRecords Component */
+.records-container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.records-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+.records-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.records-table th,
+.records-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.records-table th {
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+.loading-msg {
+  color: #666;
+  text-align: center;
+}
+
+.info-msg {
+  color: #666;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.add-record-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.add-record-btn:hover {
+  background-color: #0056b3;
+}
+
+/* RecordsDashboard Component */
+.dashboard-container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+.dashboard-section {
+  margin-bottom: 20px;
+}
+
+.dashboard-section h3 {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.dashboard-section p {
+  font-size: 16px;
+  color: #333;
+}
+
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.dashboard-table th {
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+/* Annual Records Table */
+.annual-records-table {
+  width: 80%;
+  border-collapse: collapse;
+  margin: 20px auto;
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.annual-records-table th,
+.annual-records-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.annual-records-table th {
+  background: #007bff; /* Primary blue from your theme */
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.annual-records-table td {
+  font-size: 16px;
+  color: #333;
+}
+
+.annual-records-table tr:nth-child(even) {
+  background: #f8f9fa; /* Light gray for alternating rows */
+}
+
+.annual-records-table tr:hover {
+  background: #e9f1ff; /* Light blue hover effect */
+  transition: background 0.2s ease;
+}
+
+.annual-records-table td:first-child,
+.annual-records-table th:first-child {
+  padding-left: 20px; /* Extra padding for first column */
+}
+
+.annual-records-table td:last-child,
+.annual-records-table th:last-child {
+  padding-right: 20px; /* Extra padding for last column */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .annual-records-table {
+    display: block;
+    overflow-x: auto; /* Horizontal scroll on small screens */
+  }
+
+  .annual-records-table th,
+  .annual-records-table td {
+    min-width: 120px; /* Ensure columns don’t collapse too much */
+  }
+}
+
+/* Common Styles */
+.success-msg {
+  color: #28a745;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.error-msg {
+  color: #dc3545;
+  margin-bottom: 10px;
+  text-align: center;
+}
