@@ -23,6 +23,29 @@ const userWallet = asyncHandler(async (req, res) => {
         )
 })
 
+const createWallet = asyncHandler(async (req, res) => {
+    const existingWallet = await Wallet.findOne({ owner: req.user._id })
+
+    if (existingWallet) {
+        throw new ApiError(400, "Wallet already exists")
+    }
+
+    const wallet = await Wallet.create({ owner: req.user._id, })
+
+    return res
+        .status(201)
+        .json(
+            new ApiResponse(
+                201,
+                {
+                    walletName: wallet.walletName,
+                    balance: wallet.balance
+                },
+                "Wallet created successfully"
+            )
+        )
+})
+
 const addWalletBalance = [
     check("amount").isNumeric().withMessage("Amount must be a number"),
     asyncHandler(async (req, res) => {
@@ -100,7 +123,11 @@ const changeWalletName = asyncHandler(async (req, res) => {
 })
 
 const deleteWallet = asyncHandler(async (req, res) => {
-    const wallet = await Wallet.findOneAndDelete({ owner: req.user._id })
+    const wallet = await Wallet.findOneAndUpdate(
+        { owner: req.user._id },
+        { walletName: "Wallet", balance: 0 },
+        { new: true }
+    )
 
     if (!wallet) {
         throw new ApiError(404, "Wallet not found/deleted")
@@ -111,4 +138,4 @@ const deleteWallet = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, null, "Wallet deleted successfully"))
 })
 
-export { userWallet, addWalletBalance, changeWalletName, deleteWallet }
+export { userWallet, createWallet, addWalletBalance, changeWalletName, deleteWallet }
