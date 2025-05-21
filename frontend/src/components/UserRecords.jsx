@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
+import api from "../api/axios"
 
 export default function UserRecords({ handleNavigate }) {
     const [records, setRecords] = useState([])
@@ -25,7 +26,7 @@ export default function UserRecords({ handleNavigate }) {
         }
 
         try {
-            const response = await axios.get("/api/v1/records", {
+            const response = await api.get("/api/v1/records", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

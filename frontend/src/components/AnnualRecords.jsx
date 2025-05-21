@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
+import api from "../api/axios"
 
 export default function AnnualRecords({ handleNavigate }) {
     const [annualRecords, setAnnualRecords] = useState([])
@@ -23,7 +24,7 @@ export default function AnnualRecords({ handleNavigate }) {
         }
 
         try {
-            const response = await axios.get("/api/v1/dashboard/annual", {
+            const response = await api.get("/api/v1/dashboard/annual", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

@@ -1,5 +1,6 @@
 import { useState } from "react"
 import axios from "axios"
+import api from "../api/axios"
 
 export default function Login({ handleNavigate }) {
     const [credentials, setCredentials] = useState({
@@ -25,7 +26,7 @@ export default function Login({ handleNavigate }) {
         setSuccess(null)
 
         try {
-            const response = await axios.post("/api/v1/user/login", {
+            const response = await api.post("/api/v1/user/login", {
                 username: credentials.usernameOrEmail.includes("@")
                     ? undefined
                     : credentials.usernameOrEmail,

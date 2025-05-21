@@ -1,5 +1,6 @@
 import { useState } from "react"
 import axios from "axios"
+import api from "../api/axios"
 
 export default function CreateRecord({ handleNavigate }) {
     const [formData, setFormData] = useState({
@@ -56,7 +57,7 @@ export default function CreateRecord({ handleNavigate }) {
         }
 
         try {
-            const response = await axios.post(
+            const response = await api.post(
                 "/api/v1/records/create/",
                 {
                     date: formData.date,

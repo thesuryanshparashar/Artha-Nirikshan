@@ -1,5 +1,6 @@
 import { useState } from "react"
 import axios from "axios"
+import api from "../api/axios"
 
 export default function Register({ handleNavigate }) {
     const [formData, setFormData] = useState({
@@ -26,7 +27,7 @@ export default function Register({ handleNavigate }) {
         setSuccess("")
 
         try {
-            const response = await axios.post("/api/v1/user/register", formData)
+            const response = await api.post("/api/v1/user/register", formData)
             setSuccess(response.data.message)
             setFormData({
                 username: "",

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
+import api from "../api/axios"
 
 export default function RecordsDashboard({ handleNavigate }) {
     const [dashboardData, setDashboardData] = useState(null)
@@ -23,7 +24,7 @@ export default function RecordsDashboard({ handleNavigate }) {
         }
 
         try {
-            const response = await axios.get("/api/v1/dashboard", {
+            const response = await api.get("/api/v1/dashboard", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

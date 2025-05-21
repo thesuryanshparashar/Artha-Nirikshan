@@ -8,7 +8,7 @@ export default function Healthcheck() {
 
     const fetchHealthcheck = async () => {
         try {
-            const response = await axios.get("/api/v1/healthcheck")
+            const response = await api.get("/api/v1/healthcheck")
             console.log(response.data.message)
             setData(response.data.message)
         } catch (error) {

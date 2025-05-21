@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
+import api from "../api/axios"
 
 export default function Header({ handleNavigate }) {
     const [buttonText, setButtonText] = useState("Guest")
@@ -19,7 +20,7 @@ export default function Header({ handleNavigate }) {
 
     const fetchUserData = async (token) => {
         try {
-            const response = await axios.get("/api/v1/user/current-user", {
+            const response = await api.get("/api/v1/user/current-user", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -39,7 +40,7 @@ export default function Header({ handleNavigate }) {
         setLogoutError("")
         try {
             const token = localStorage.getItem("token")
-            const response = await axios.post(
+            const response = await api.post(
                 "/api/v1/user/logout",
                 {},
                 {
