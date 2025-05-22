@@ -8,8 +8,25 @@ export default function Login({ handleNavigate }) {
         password: "",
     })
     const [loading, setLoading] = useState(false)
-    const [error, serError] = useState(null)
+    const [error, setError] = useState(null)
     const [success, setSuccess] = useState(null)
+
+    const validateCredentials = () => {
+        const { usernameOrEmail, password } = credentials
+        if (!usernameOrEmail || !password) {
+            return "Please fill in all fields."
+        }
+        if (
+            usernameOrEmail.includes("@") &&
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(usernameOrEmail)
+        ) {
+            return "Invalid email format."
+        }
+        if (password.length < 6) {
+            return "Password must be at least 6 characters."
+        }
+        return null
+    }
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -17,13 +34,21 @@ export default function Login({ handleNavigate }) {
             ...prev,
             [name]: value,
         }))
+        setError(null)
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)
-        serError(null)
+        setError(null)
         setSuccess(null)
+
+        const validationError = validateCredentials()
+        if (validationError) {
+            setError(validationError)
+            setLoading(false)
+            return
+        }
 
         try {
             const response = await api.post("/api/v1/user/login", {
@@ -40,14 +65,20 @@ export default function Login({ handleNavigate }) {
             localStorage.setItem("token", accessToken)
             setSuccess(response.data.message)
 
-            setTimeout(() => {
-                handleNavigate("/dashboard")
-            }, 1500)
+            handleNavigate("/dashboard")
         } catch (error) {
-            serError(
-                error.response?.data?.message ||
-                    "Login failed. Please try again."
-            )
+            const status = error.response?.status
+            let message = "Login failed. Please try again."
+            if (status === 401) {
+                message = "Invalid username/email or password."
+            } else if (status === 500) {
+                message = "Server error. Please try again later."
+            } else if (!error.response) {
+                message = "Network error. Check your connection."
+            } else {
+                message = error.response?.data?.message || message
+            }
+            setError(message)
         } finally {
             setLoading(false)
         }
@@ -56,8 +87,16 @@ export default function Login({ handleNavigate }) {
     return (
         <div className="login-container">
             <h2>Login</h2>
-            {success && <p className="success-msg">{success}</p>}
-            {error && <p className="error-msg">{error}</p>}
+            {success && (
+                <p className="success-msg" role="alert">
+                    {success}
+                </p>
+            )}
+            {error && (
+                <p className="error-msg" role="alert">
+                    {error}
+                </p>
+            )}
             <form onSubmit={handleSubmit} className="login-form">
                 <div className="form-input">
                     <input
@@ -68,6 +107,7 @@ export default function Login({ handleNavigate }) {
                         onChange={handleChange}
                         required
                         disabled={loading}
+                        aria-invalid={error ? "true" : "false"}
                     />
                 </div>
                 <div className="form-input">
@@ -79,24 +119,32 @@ export default function Login({ handleNavigate }) {
                         onChange={handleChange}
                         required
                         disabled={loading}
+                        aria-invalid={error ? "true" : "false"}
                     />
                 </div>
-                <button type="submit" disabled={loading} className="login-btn">
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className="login-btn"
+                    aria-busy={loading ? "true" : "false"}
+                >
                     {loading ? "Logging in..." : "Login"}
                 </button>
             </form>
             <p>
                 Don’t have an account?{" "}
-                <span
+                <button
+                    type="button"
                     className="register-link"
                     onClick={() => !loading && handleNavigate("/register")}
+                    disabled={loading}
                     style={{
                         cursor: loading ? "not-allowed" : "pointer",
                         color: "blue",
                     }}
                 >
                     Register
-                </span>
+                </button>
             </p>
         </div>
     )
