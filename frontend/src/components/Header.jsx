@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import api from "../api/axios"
+import { Sling as Hamburger } from "hamburger-react"
 
 export default function Header({ handleNavigate }) {
     const [buttonText, setButtonText] = useState("User")
@@ -7,9 +8,63 @@ export default function Header({ handleNavigate }) {
     const [isPopupOpen, setIsPopupOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
+    const [isOpen, setOpen] = useState(window.innerWidth >= 1080)
+    const navRef = useRef(null)
+
+    // Scroll lock and cleanup for mobile only
+    useEffect(() => {
+        if (isOpen && window.innerWidth < 1080) {
+            document.body.style.overflow = "hidden"
+        } else {
+            document.body.style.overflow = "auto"
+        }
+        return () => {
+            document.body.style.overflow = "auto"
+        }
+    }, [isOpen])
+
+    // Close menu on route change
+    useEffect(() => {
+        const handleRouteChange = () => {
+            setOpen(window.innerWidth >= 1080)
+        }
+        window.addEventListener("popstate", handleRouteChange)
+        return () => {
+            window.removeEventListener("popstate", handleRouteChange)
+        }
+    }, [])
+
+    // Close menu on click outside for mobile
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                isOpen &&
+                window.innerWidth < 1080 &&
+                navRef.current &&
+                !navRef.current.contains(event.target)
+            ) {
+                setOpen(false)
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside)
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside)
+        }
+    }, [isOpen])
+
+    // Update isOpen on window resize
+    useEffect(() => {
+        const handleResize = () => {
+            setOpen(window.innerWidth >= 1080)
+        }
+        window.addEventListener("resize", handleResize)
+        return () => {
+            window.removeEventListener("resize", handleResize)
+        }
+    }, [])
 
     useEffect(() => {
-        const token = localStorage.getItem("token") // Replace with cookie-based check if using httpOnly
+        const token = localStorage.getItem("token")
         if (token) {
             fetchUserData(token)
         }
@@ -41,7 +96,7 @@ export default function Header({ handleNavigate }) {
         setLoading(true)
         setError(null)
         try {
-            const token = localStorage.getItem("token") // Replace if using cookies
+            const token = localStorage.getItem("token")
             await api.post(
                 "/api/v1/user/logout",
                 {},
@@ -51,7 +106,7 @@ export default function Header({ handleNavigate }) {
                     },
                 }
             )
-            localStorage.removeItem("token") // Clear token
+            localStorage.removeItem("token")
             setButtonText("User")
             setAvatar(null)
             setIsPopupOpen(false)
@@ -94,12 +149,57 @@ export default function Header({ handleNavigate }) {
                     {error}
                 </p>
             )}
-            <nav className="header-nav" aria-label="Main navigation">
+            <Hamburger
+                toggled={isOpen}
+                toggle={setOpen}
+                aria-controls="main-nav"
+                aria-label="Toggle main navigation"
+            />
+            <nav
+                ref={navRef}
+                id="main-nav"
+                className="header-nav"
+                aria-label="Main navigation"
+                aria-hidden={window.innerWidth < 1080 && !isOpen}
+                style={
+                    window.innerWidth < 1080
+                        ? {
+                              position: "fixed",
+                              top: isOpen ? "0" : "-110%",
+                              left: 0,
+                              width: "100%",
+                              height: "100%",
+                              background: "transparent",
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              transition: "top 0.3s ease-in-out",
+                              zIndex: isOpen ? "1000" : "-1",
+                              pointerEvents: isOpen ? "auto" : "none",
+                              gap: isOpen ? "1rem" : "0",
+                          }
+                        : {
+                              position: "static",
+                              width: "auto",
+                              height: "auto",
+                              background: "none",
+                              zIndex: "auto",
+                              pointerEvents: "auto",
+                              gap: "1rem",
+                          }
+                }
+            >
                 <ul className="nav-list">
-                    <li>
+                    {/* <li>
                         <button
                             className="nav-btn"
-                            onClick={() => !loading && handleNavigate("/")}
+                            onClick={() => {
+                                if (!loading) {
+                                    handleNavigate("/")
+                                    setOpen(window.innerWidth >= 1080)
+                                }
+                            }}
                             disabled={loading}
                             aria-current={
                                 window.location.pathname === "/"
@@ -109,13 +209,16 @@ export default function Header({ handleNavigate }) {
                         >
                             Home
                         </button>
-                    </li>
-                    <li>
+                    </li> */}
+                    {/* <li>
                         <button
                             className="nav-btn"
-                            onClick={() =>
-                                !loading && handleNavigate("/healthcheck")
-                            }
+                            onClick={() => {
+                                if (!loading) {
+                                    handleNavigate("/healthcheck")
+                                    setOpen(window.innerWidth >= 1080)
+                                }
+                            }}
                             disabled={loading}
                             aria-current={
                                 window.location.pathname === "/healthcheck"
@@ -125,15 +228,18 @@ export default function Header({ handleNavigate }) {
                         >
                             Healthcheck
                         </button>
-                    </li>
+                    </li> */}
                     {avatar ? (
                         <>
                             <li>
                                 <button
                                     className="nav-btn"
-                                    onClick={() =>
-                                        !loading && handleNavigate("/dashboard")
-                                    }
+                                    onClick={() => {
+                                        if (!loading) {
+                                            handleNavigate("/dashboard")
+                                            setOpen(window.innerWidth >= 1080)
+                                        }
+                                    }}
                                     disabled={loading}
                                     aria-current={
                                         window.location.pathname ===
@@ -148,10 +254,12 @@ export default function Header({ handleNavigate }) {
                             <li>
                                 <button
                                     className="nav-btn"
-                                    onClick={() =>
-                                        !loading &&
-                                        handleNavigate("/dashboard/annual")
-                                    }
+                                    onClick={() => {
+                                        if (!loading) {
+                                            handleNavigate("/dashboard/annual")
+                                            setOpen(window.innerWidth >= 1080)
+                                        }
+                                    }}
                                     disabled={loading}
                                     aria-current={
                                         window.location.pathname ===
@@ -166,9 +274,12 @@ export default function Header({ handleNavigate }) {
                             <li>
                                 <button
                                     className="nav-btn"
-                                    onClick={() =>
-                                        !loading && handleNavigate("/records")
-                                    }
+                                    onClick={() => {
+                                        if (!loading) {
+                                            handleNavigate("/records")
+                                            setOpen(window.innerWidth >= 1080)
+                                        }
+                                    }}
                                     disabled={loading}
                                     aria-current={
                                         window.location.pathname === "/records"
@@ -182,10 +293,12 @@ export default function Header({ handleNavigate }) {
                             <li>
                                 <button
                                     className="nav-btn"
-                                    onClick={() =>
-                                        !loading &&
-                                        handleNavigate("/records/create")
-                                    }
+                                    onClick={() => {
+                                        if (!loading) {
+                                            handleNavigate("/records/create")
+                                            setOpen(window.innerWidth >= 1080)
+                                        }
+                                    }}
                                     disabled={loading}
                                     aria-current={
                                         window.location.pathname ===
@@ -203,9 +316,12 @@ export default function Header({ handleNavigate }) {
                             <li>
                                 <button
                                     className="nav-btn login-btn"
-                                    onClick={() =>
-                                        !loading && handleNavigate("/login")
-                                    }
+                                    onClick={() => {
+                                        if (!loading) {
+                                            handleNavigate("/login")
+                                            setOpen(window.innerWidth >= 1080)
+                                        }
+                                    }}
                                     disabled={loading}
                                     aria-current={
                                         window.location.pathname === "/login"
@@ -219,9 +335,12 @@ export default function Header({ handleNavigate }) {
                             <li>
                                 <button
                                     className="nav-btn register-btn"
-                                    onClick={() =>
-                                        !loading && handleNavigate("/register")
-                                    }
+                                    onClick={() => {
+                                        if (!loading) {
+                                            handleNavigate("/register")
+                                            setOpen(window.innerWidth >= 1080)
+                                        }
+                                    }}
                                     disabled={loading}
                                     aria-current={
                                         window.location.pathname === "/register"
@@ -256,7 +375,7 @@ export default function Header({ handleNavigate }) {
                                     src={avatar}
                                     alt={`${buttonText}'s avatar`}
                                     className="avatar-img"
-                                    onError={() => setAvatar(null)} // Fallback if image fails
+                                    onError={() => setAvatar(null)}
                                 />
                                 <span className="username">{buttonText}</span>
                             </>

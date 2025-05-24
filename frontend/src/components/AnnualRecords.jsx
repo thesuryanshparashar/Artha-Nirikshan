@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
-import axios from "axios"
 import api from "../api/axios"
+import formatIndianNumber from "../utils/FormatIndianNumber.js"
 
 export default function AnnualRecords({ handleNavigate }) {
     const [annualRecords, setAnnualRecords] = useState([])
@@ -60,12 +60,7 @@ export default function AnnualRecords({ handleNavigate }) {
         "December",
     ]
 
-    const formatIndianNumber = (amount) => {
-        return amount.toLocaleString("en-IN", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        })
-    }
+    
 
     if (loading) {
         return (
@@ -89,29 +84,45 @@ export default function AnnualRecords({ handleNavigate }) {
             {annualRecords.length === 0 ? (
                 <p className="no-records-msg">No annual records found.</p>
             ) : (
-                <table className="annual-records-table">
-                    <thead>
-                        <tr>
-                            <th>Year</th>
-                            <th>Month</th>
-                            <th>Total Amount (₹)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {annualRecords.map((record, index) => (
-                            <tr key={index}>
-                                <td>{record._id.year}</td>
-                                <td>{monthNames[record._id.month - 1]}</td>
-                                <td>
-                                    ₹{" "}
-                                    {formatIndianNumber(
-                                        record.totalAmount
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <div id="annual-card-container" className="card-container">
+                    {annualRecords.map((record, index) => (
+                        <div key={index} className="annual-card card">
+                            <div className="accent-layer"></div>
+                            <h3>
+                                {monthNames[record._id.month - 1]}{" "}
+                                {record._id.year}
+                            </h3>
+                            <p>
+                                Total Amount: ₹{" "}
+                                {formatIndianNumber(record.totalAmount)}
+                            </p>
+                        </div>
+                    ))}
+                    {/* <div className="card annual-card"></div> */}
+                </div>
+                // <table className="annual-records-table">
+                //     <thead>
+                //         <tr>
+                //             <th>Year</th>
+                //             <th>Month</th>
+                //             <th>Total Amount (₹)</th>
+                //         </tr>
+                //     </thead>
+                //     <tbody>
+                //         {annualRecords.map((record, index) => (
+                //             <tr key={index}>
+                //                 <td>{record._id.year}</td>
+                //                 <td>{monthNames[record._id.month - 1]}</td>
+                //                 <td>
+                //                     ₹{" "}
+                //                     {formatIndianNumber(
+                //                         record.totalAmount
+                //                     )}
+                //                 </td>
+                //             </tr>
+                //         ))}
+                //     </tbody>
+                // </table>
             )}
             <button className="back-btn" onClick={() => handleNavigate("/")}>
                 Back to Home
