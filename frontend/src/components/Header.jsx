@@ -142,7 +142,7 @@ export default function Header({ handleNavigate }) {
                 tabIndex={0}
                 style={{ cursor: loading ? "not-allowed" : "pointer" }}
             >
-                Artha Nirikshan
+                Artha Nirikshana
             </h1>
             {error && (
                 <p className="error-msg" role="alert">
