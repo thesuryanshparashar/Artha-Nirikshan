@@ -10,8 +10,10 @@ export default function Header({ handleNavigate }) {
     const [error, setError] = useState(null)
     const [isOpen, setOpen] = useState(window.innerWidth >= 1080)
     const navRef = useRef(null)
+    const hamburgerRef = useRef(null) // Ref for hamburger
+    const toggleTimeoutRef = useRef(null) // For debouncing
 
-    // Scroll lock and cleanup for mobile only
+    // Scroll lock for mobile
     useEffect(() => {
         if (isOpen && window.innerWidth < 1080) {
             document.body.style.overflow = "hidden"
@@ -23,25 +25,35 @@ export default function Header({ handleNavigate }) {
         }
     }, [isOpen])
 
-    // Close menu on route change
+    // Handle resize and route changes
     useEffect(() => {
+        const handleResize = () => {
+            const isDesktop = window.innerWidth >= 1080
+            setOpen((prev) => (isDesktop ? true : prev && !isDesktop))
+        }
+
         const handleRouteChange = () => {
             setOpen(window.innerWidth >= 1080)
         }
+
+        window.addEventListener("resize", handleResize)
         window.addEventListener("popstate", handleRouteChange)
         return () => {
+            window.removeEventListener("resize", handleResize)
             window.removeEventListener("popstate", handleRouteChange)
         }
     }, [])
 
-    // Close menu on click outside for mobile
+    // Click outside to close menu
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (
                 isOpen &&
                 window.innerWidth < 1080 &&
                 navRef.current &&
-                !navRef.current.contains(event.target)
+                !navRef.current.contains(event.target) &&
+                hamburgerRef.current &&
+                !hamburgerRef.current.contains(event.target)
             ) {
                 setOpen(false)
             }
@@ -52,17 +64,7 @@ export default function Header({ handleNavigate }) {
         }
     }, [isOpen])
 
-    // Update isOpen on window resize
-    useEffect(() => {
-        const handleResize = () => {
-            setOpen(window.innerWidth >= 1080)
-        }
-        window.addEventListener("resize", handleResize)
-        return () => {
-            window.removeEventListener("resize", handleResize)
-        }
-    }, [])
-
+    // Fetch user data
     useEffect(() => {
         const token = localStorage.getItem("token")
         if (token) {
@@ -129,6 +131,16 @@ export default function Header({ handleNavigate }) {
         setIsPopupOpen(false)
     }
 
+    // Debounced toggle
+    const handleToggle = (toggled) => {
+        if (toggleTimeoutRef.current) {
+            clearTimeout(toggleTimeoutRef.current)
+        }
+        toggleTimeoutRef.current = setTimeout(() => {
+            setOpen(toggled)
+        }, 100) // 100ms debounce
+    }
+
     return (
         <header className="header" role="banner">
             <h1
@@ -149,12 +161,14 @@ export default function Header({ handleNavigate }) {
                     {error}
                 </p>
             )}
-            <Hamburger
-                toggled={isOpen}
-                toggle={setOpen}
-                aria-controls="main-nav"
-                aria-label="Toggle main navigation"
-            />
+            <div ref={hamburgerRef} className="hamburger-wrapper">
+                <Hamburger
+                    toggled={isOpen}
+                    toggle={handleToggle}
+                    aria-controls="main-nav"
+                    aria-label="Toggle main navigation"
+                />
+            </div>
             <nav
                 ref={navRef}
                 id="main-nav"
@@ -191,44 +205,6 @@ export default function Header({ handleNavigate }) {
                 }
             >
                 <ul className="nav-list">
-                    {/* <li>
-                        <button
-                            className="nav-btn"
-                            onClick={() => {
-                                if (!loading) {
-                                    handleNavigate("/")
-                                    setOpen(window.innerWidth >= 1080)
-                                }
-                            }}
-                            disabled={loading}
-                            aria-current={
-                                window.location.pathname === "/"
-                                    ? "page"
-                                    : undefined
-                            }
-                        >
-                            Home
-                        </button>
-                    </li> */}
-                    {/* <li>
-                        <button
-                            className="nav-btn"
-                            onClick={() => {
-                                if (!loading) {
-                                    handleNavigate("/healthcheck")
-                                    setOpen(window.innerWidth >= 1080)
-                                }
-                            }}
-                            disabled={loading}
-                            aria-current={
-                                window.location.pathname === "/healthcheck"
-                                    ? "page"
-                                    : undefined
-                            }
-                        >
-                            Healthcheck
-                        </button>
-                    </li> */}
                     {avatar ? (
                         <>
                             <li>
