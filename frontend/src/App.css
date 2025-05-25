@@ -459,6 +459,10 @@ a:hover {
     width: 300px;
 }
 
+.card p {
+    text-wrap: balance;
+}
+
 .card:hover > * {
     color: var(--bg-primary);
     z-index: 2;
