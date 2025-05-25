@@ -605,9 +605,9 @@ a:hover {
 .edit-wallet {
     overflow: hidden;
     background: transparent;
-  }
-  
-  .edit-wallet button {
+}
+
+.edit-wallet button {
     background: transparent;
     border: none;
     outline: none;
@@ -620,7 +620,6 @@ a:hover {
     /* padding: 0.5rem 1rem; */
     /* transition: all 0.2s ease; */
 }
-
 
 /* Buttons */
 .submit-btn,
@@ -900,6 +899,29 @@ hr {
 
 .hamburger-react {
     z-index: 1008;
+}
+
+/* Table Design */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+tr {
+    border-radius: 8px;
+}
+th,
+td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+}
+th {
+    background-color: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+td {
+    color: var(--text-primary);
 }
 
 /* Responsive Media Queries */
