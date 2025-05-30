@@ -15,12 +15,13 @@ import { verifyJWT } from "../middlewares/auth.middleware.js"
 const router = Router()
 
 router.route("/register").post(
-    upload.single([
-        {
-            name: "avatar",
-            maxCount: 1,
-        },
-    ]),
+    upload.single("avatar"), // Single file upload for avatar
+    // upload.fields([
+    //     {
+    //         name: "avatar",
+    //         maxCount: 1,
+    //     },
+    // ]), // Multiple file upload example
     registerUser
 )
 
@@ -33,8 +34,8 @@ router.route("/current-user").get(verifyJWT, getUser)
 router.route("/change-password").post(verifyJWT, changeCurrentPassword)
 router.route("/update-profile").patch(verifyJWT, updateAccountDetails)
 
-// router
-//     .route("/update-avatar")
-//     .patch(verifyJWT, upload.single("avatar"), updateUserAvatar)
+router
+    .route("/update-avatar")
+    .patch(verifyJWT, upload.single("avatar"), updateUserAvatar)
 
 export default router

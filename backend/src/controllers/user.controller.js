@@ -24,7 +24,7 @@ const generateAccessAndRefreshToken = async (userId) => {
 }
 
 const registerUser = asyncHandler(async (req, res) => {
-    const { username, email, fullName, password, avatar } = req.body
+    const { username, email, fullName, password } = req.body
 
     if (
         [username, email, fullName, password].some(
@@ -53,11 +53,24 @@ const registerUser = asyncHandler(async (req, res) => {
     //     avatarLocalPath = req.files.avatar[0].path
     // }
 
-    // const avatar = await uploadOnCloudinary(avatarLocalPath)
+    console.log(req.file ? req.file.path : "No avatar file uploaded")
 
-    // if (!avatar) {
-    //     throw new ApiError(500, "Avatar upload failed")
-    // }
+    const avatarLocalPath = req.file?.path || req.files?.avatar?.[0]?.path
+
+    // const avatarLocalPath = req.file?.path
+
+    if (!avatarLocalPath) {
+        throw new ApiError(400, "Avatar file is required")
+    }
+    if (avatarLocalPath.length > 5000000) {
+        throw new ApiError(400, "Avatar file size exceeds 5MB limit")
+    }
+
+    const avatar = await uploadOnCloudinary(avatarLocalPath)
+
+    if (!avatar) {
+        throw new ApiError(500, "Avatar upload failed")
+    }
 
     const user = await User.create({
         username,

@@ -1,5 +1,8 @@
 import { v2 as cloudinary } from "cloudinary"
 import fs from "fs"
+import dotenv from "dotenv"
+
+dotenv.config()
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -11,27 +14,34 @@ cloudinary.config({
 const uploadOnCloudinary = async (localFilePath) => {
     try {
         if (!localFilePath) return null
+
         console.log("Uploading image to Cloudinary...")
         console.log("Local file path:", localFilePath)
 
         const response = await cloudinary.uploader.upload(localFilePath, {
             folder: "Artha-Nirikshan",
-            
             resource_type: "image",
-        }).catch((error) => {
-            console.error(error)
-            fs.unlinkSync(localFilePath)
         })
+
         console.log("Image uploaded successfully!")
         console.log(response)
 
-        fs.unlinkSync(localFilePath)
+        if (fs.existsSync(localFilePath)) {
+            console.log("Deleting local file after upload...")
+            fs.unlinkSync(localFilePath)
+        }
 
         return response
 
     } catch (error) {
         console.error(error)
-        fs.unlinkSync(localFilePath)
+
+        if (fs.existsSync(localFilePath)) {
+            console.log("Error occurred, deleting local file...")
+            fs.unlinkSync(localFilePath)
+        }
+
+        return null
     }
 }
 
