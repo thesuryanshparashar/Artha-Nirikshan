@@ -22,6 +22,10 @@ export default function Register({ handleNavigate }) {
                 ...prev,
                 avatar: files[0], // Store the file object
             }))
+            if (files[0].size > 5 * 1024 * 1024) {
+                alert("Avatar file size must be less than 5MB")
+                return
+            }
         } else {
             setFormData((prev) => ({ ...prev, [name]: value }))
         }

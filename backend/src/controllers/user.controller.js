@@ -63,9 +63,9 @@ const registerUser = asyncHandler(async (req, res) => {
     //     throw new ApiError(400, "Avatar file is required")
     // }
 
-    if (req.file?.size > 10000000) {
+    if (req.file?.size > 5000000) {
         await deleteLocalFile(avatarLocalPath)
-        throw new ApiError(400, "Avatar file size exceeds 10MB limit")
+        throw new ApiError(400, "Avatar file size exceeds 5MB limit")
     }
 
     const avatar = await uploadOnCloudinary(avatarLocalPath)
