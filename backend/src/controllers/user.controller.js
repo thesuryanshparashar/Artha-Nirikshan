@@ -2,7 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { ApiError } from "../utils/ApiError.js"
 import { User } from "../models/user.model.js"
-import { uploadOnCloudinary } from "../utils/cloudinary.js"
+import { uploadOnCloudinary, deleteLocalFile } from "../utils/cloudinary.js"
 import jwt from "jsonwebtoken"
 
 const generateAccessAndRefreshToken = async (userId) => {
@@ -55,20 +55,25 @@ const registerUser = asyncHandler(async (req, res) => {
 
     console.log(req.file ? req.file.path : "No avatar file uploaded")
 
-    const avatarLocalPath = req.file?.path || req.files?.avatar?.[0]?.path
+    const avatarLocalPath = req.file?.path
 
     // const avatarLocalPath = req.file?.path
 
-    if (!avatarLocalPath) {
-        throw new ApiError(400, "Avatar file is required")
-    }
-    if (avatarLocalPath.length > 5000000) {
-        throw new ApiError(400, "Avatar file size exceeds 5MB limit")
+    // if (!avatarLocalPath) {
+    //     throw new ApiError(400, "Avatar file is required")
+    // }
+
+    if (req.file?.size > 10000000) {
+        await deleteLocalFile(avatarLocalPath)
+        throw new ApiError(400, "Avatar file size exceeds 10MB limit")
     }
 
     const avatar = await uploadOnCloudinary(avatarLocalPath)
 
-    if (!avatar) {
+    // console.log("Avatar upload response:", avatar)
+
+    if (avatarLocalPath && !avatar) {
+        await deleteLocalFile(avatarLocalPath)
         throw new ApiError(500, "Avatar upload failed")
     }
 
@@ -77,12 +82,14 @@ const registerUser = asyncHandler(async (req, res) => {
         fullName,
         email,
         password,
-        avatar: avatar?.url,
+        avatar:
+            avatar?.url ||
+            `https://dummyimage.com/256x256/4f46e5/ffffff&text=${username[0]}`,
     })
 
-    const createdUser = await User
-        .findById(user._id)
-        .select("-password -refreshToken")
+    const createdUser = await User.findById(user._id).select(
+        "-password -refreshToken"
+    )
 
     if (!createdUser) {
         throw new ApiError(500, "User registration failed")

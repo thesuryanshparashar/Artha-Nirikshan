@@ -13,18 +13,20 @@ cloudinary.config({
 
 const uploadOnCloudinary = async (localFilePath) => {
     try {
+        // console.log("Starting image upload to Cloudinary...", localFilePath)
+
         if (!localFilePath) return null
 
-        console.log("Uploading image to Cloudinary...")
-        console.log("Local file path:", localFilePath)
+        // console.log("Uploading image to Cloudinary...")
+        // console.log("Local file path:", localFilePath)
 
         const response = await cloudinary.uploader.upload(localFilePath, {
             folder: "Artha-Nirikshan",
             resource_type: "image",
         })
 
-        console.log("Image uploaded successfully!")
-        console.log(response)
+        // console.log("Image uploaded successfully!")
+        // console.log(response)
 
         if (fs.existsSync(localFilePath)) {
             console.log("Deleting local file after upload...")
@@ -32,7 +34,6 @@ const uploadOnCloudinary = async (localFilePath) => {
         }
 
         return response
-
     } catch (error) {
         console.error(error)
 
@@ -45,4 +46,9 @@ const uploadOnCloudinary = async (localFilePath) => {
     }
 }
 
-export { uploadOnCloudinary }
+const deleteLocalFile = (localFilePath) => {
+    console.log("Deleting local file:", localFilePath)
+    fs.unlinkSync(localFilePath)
+}
+
+export { uploadOnCloudinary, deleteLocalFile }

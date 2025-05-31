@@ -1,5 +1,4 @@
 import { useState } from "react"
-import axios from "axios"
 import api from "../api/axios"
 
 export default function Register({ handleNavigate }) {
@@ -8,7 +7,7 @@ export default function Register({ handleNavigate }) {
         email: "",
         fullName: "",
         password: "",
-        avatar: "",
+        avatar: null,
     })
 
     const [loading, setLoading] = useState(false)
@@ -16,8 +15,16 @@ export default function Register({ handleNavigate }) {
     const [success, setSuccess] = useState("")
 
     const handleChange = (e) => {
-        const { name, value } = e.target
-        setFormData((prev) => ({ ...prev, [name]: value }))
+        const { name, value, files } = e.target
+
+        if (name === "avatar" && files.length > 0) {
+            setFormData((prev) => ({
+                ...prev,
+                avatar: files[0], // Store the file object
+            }))
+        } else {
+            setFormData((prev) => ({ ...prev, [name]: value }))
+        }
     }
 
     const handleSubmit = async (e) => {
@@ -27,14 +34,36 @@ export default function Register({ handleNavigate }) {
         setSuccess("")
 
         try {
-            const response = await api.post("/api/v1/user/register", formData)
+            const data = new FormData()
+            data.append("username", formData.username)
+            data.append("email", formData.email)
+            data.append("fullName", formData.fullName)
+            data.append("password", formData.password)
+            if (formData.avatar) {
+                data.append("avatar", formData.avatar)
+            }
+
+            console.log("Form data being sent:", {
+                username: formData.username,
+                email: formData.email,
+                fullName: formData.fullName,
+                password: formData.password,
+                avatar: formData.avatar ? formData.avatar.name : "No avatar",
+            })
+
+            const response = await api.post("/api/v1/user/register", data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+
             setSuccess(response.data.message)
             setFormData({
                 username: "",
                 email: "",
                 fullName: "",
                 password: "",
-                avatar: "",
+                avatar: null,
             })
 
             setTimeout(() => handleNavigate("/login"), 1500)
@@ -103,7 +132,6 @@ export default function Register({ handleNavigate }) {
                         type="file"
                         name="avatar"
                         placeholder="Avatar URL (optional)"
-                        value={formData.avatar}
                         onChange={handleChange}
                         disabled={loading}
                     />
