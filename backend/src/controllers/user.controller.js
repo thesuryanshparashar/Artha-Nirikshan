@@ -53,9 +53,7 @@ const registerUser = asyncHandler(async (req, res) => {
     //     avatarLocalPath = req.files.avatar[0].path
     // }
 
-    console.log(req.file ? req.file.path : "No avatar file uploaded")
-
-    const avatarLocalPath = req.file?.path
+    // console.log(req.file ? req.file.path : "No avatar file uploaded")
 
     // const avatarLocalPath = req.file?.path
 
@@ -63,17 +61,30 @@ const registerUser = asyncHandler(async (req, res) => {
     //     throw new ApiError(400, "Avatar file is required")
     // }
 
-    if (req.file?.size > 5000000) {
-        await deleteLocalFile(avatarLocalPath)
+    const avatarBuffer = req.file?.buffer
+    const avatarName = req.file?.originalname
+
+    // if (!avatarBuffer || !avatarName) {
+    //     throw new ApiError(400, "Avatar file is required")
+    // }
+
+    if (req.file?.size > 5 * 1024 * 1024) {
         throw new ApiError(400, "Avatar file size exceeds 5MB limit")
     }
 
-    const avatar = await uploadOnCloudinary(avatarLocalPath)
+    const avatar = await uploadOnCloudinary(avatarBuffer, avatarName)
+
+    // if (req.file?.size > 5000000) {
+    //     await deleteLocalFile(avatarLocalPath)
+    //     throw new ApiError(400, "Avatar file size exceeds 5MB limit")
+    // }
+
+    // const avatar = await uploadOnCloudinary(avatarLocalPath)
 
     // console.log("Avatar upload response:", avatar)
 
-    if (avatarLocalPath && !avatar) {
-        await deleteLocalFile(avatarLocalPath)
+    if (avatarBuffer && !avatar) {
+        // await deleteLocalFile(avatarLocalPath)
         throw new ApiError(500, "Avatar upload failed")
     }
 

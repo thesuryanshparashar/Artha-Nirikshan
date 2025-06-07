@@ -11,42 +11,61 @@ cloudinary.config({
     secure: true,
 })
 
-const uploadOnCloudinary = async (localFilePath) => {
+const uploadOnCloudinary = async (fileBuffer, originalname) => {
     try {
-        // console.log("Starting image upload to Cloudinary...", localFilePath)
+        if (!fileBuffer) return null
 
-        if (!localFilePath) return null
+        const base64 = fileBuffer.toString("base64")
+        const dataURI = `data:image/${originalname.split(".").pop()};base64,${base64}`
 
-        // console.log("Uploading image to Cloudinary...")
-        // console.log("Local file path:", localFilePath)
-
-        const response = await cloudinary.uploader.upload(localFilePath, {
+        const response = await cloudinary.uploader.upload(dataURI, {
             folder: "Artha-Nirikshan",
             resource_type: "image",
         })
 
-        // console.log("Image uploaded successfully!")
-        // console.log(response)
-
-        if (fs.existsSync(localFilePath)) {
-            console.log("Deleting local file after upload...")
-            fs.unlinkSync(localFilePath)
-        }
-
         return response
     } catch (error) {
-        console.error(error)
-
-        if (fs.existsSync(localFilePath)) {
-            console.log("Error occurred, deleting local file...")
-            fs.unlinkSync(localFilePath)
-        }
-
+        console.error("Cloudinary buffer upload error:", error)
         return null
     }
 }
 
-const deleteLocalFile = (localFilePath) => {
+// const uploadOnCloudinary = async (localFilePath) => {
+//     try {
+//         console.log("Starting image upload to Cloudinary...", localFilePath)
+
+//         if (!localFilePath) return null
+
+//         console.log("Uploading image to Cloudinary...")
+//         console.log("Local file path:", localFilePath)
+
+//         const response = await cloudinary.uploader.upload(localFilePath, {
+//             folder: "Artha-Nirikshan",
+//             resource_type: "image",
+//         })
+
+//         console.log("Image uploaded successfully!")
+//         console.log(response)
+
+//         if (fs.existsSync(localFilePath)) {
+//             console.log("Deleting local file after upload...")
+//             fs.unlinkSync(localFilePath)
+//         }
+
+//         return response
+//     } catch (error) {
+//         console.error(error)
+
+//         if (fs.existsSync(localFilePath)) {
+//             console.log("Error occurred, deleting local file...")
+//             fs.unlinkSync(localFilePath)
+//         }
+
+//         return null
+//     }
+// }
+
+const   deleteLocalFile = (localFilePath) => {
     console.log("Deleting local file:", localFilePath)
     fs.unlinkSync(localFilePath)
 }
